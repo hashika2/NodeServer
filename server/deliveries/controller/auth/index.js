@@ -7,7 +7,7 @@ router.post('/',(req, res) => {
     return register;    
 });   
 
-router.post('/login',(req, res) => {  
+router.post('/login',(req, res) => { 
   const login = Login(req,res);
   return login;    
 });

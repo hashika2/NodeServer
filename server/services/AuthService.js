@@ -45,7 +45,8 @@ const LoginService = (email,password,res) => {
             { expiresIn: 3600 }
           );
           const accessToken = {
-            accessToken: token
+            accessToken: token,
+            user:email
           }
           res.header("auth-token", accessToken).send({"token": accessToken})
         } else {
