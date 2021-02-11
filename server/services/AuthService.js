@@ -20,8 +20,11 @@ const RegisterService = (username,email,password,res) => {
       process.env.JWT_KEY,
       { expiresIn: 3600 }
     );
-    console.log(token)
-    return res.send(token); 
+    const accessToken = {
+      accessToken: token,
+      user:email
+    }
+    res.header("auth-token", accessToken).send({"token": accessToken})
   }catch(error){
     return res.status(500).json({error:error});
   }  
