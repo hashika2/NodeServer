@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Register,Login } = require('./Auth');
+const { Register,Login,Logout } = require('./Auth');
 
 router.post('/',(req, res) => {
     const register = Register(req,res);
@@ -10,6 +10,11 @@ router.post('/',(req, res) => {
 router.post('/login',(req, res) => { 
   const login = Login(req,res);
   return login;    
+});
+
+router.post('/logout',(req, res) => { 
+  const logout = Logout(req,res);
+  return logout;    
 });
 
 module.exports = router;
