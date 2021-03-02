@@ -51,6 +51,7 @@ const LoginService = async (email, password, res) => {
             accessToken: token,
             user: email,
           };
+          res.cookie('jwt',accessToken,{httpOnly:true,macAge: 50000});
           res.header("auth-token", accessToken).send({ token: accessToken });
         } else {
           return res.status(400).json({ error: "Password incorrect" });
@@ -62,4 +63,11 @@ const LoginService = async (email, password, res) => {
   }
 };
 
-module.exports = { RegisterService, LoginService };
+const LogoutService = (req,res) =>{
+  req.user.deleteToken(req.token,(err,user)=>{
+    if(err) return res.status(400).send(err);
+    res.sendStatus(200);
+});
+}
+
+module.exports = { RegisterService, LoginService, LogoutService };
