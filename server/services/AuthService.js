@@ -22,8 +22,11 @@ const RegisterService = async (username, email, password, res) => {
     const token = await jwt.sign(payload, process.env.JWT_KEY, {
       expiresIn: 3600,
     });
+    const refershToken = await jwt.sign(payload, process.env.REFRESH_KEY, {
+    });
     const accessToken = {
       accessToken: token,
+      refershToken:refershToken,
       user: email,
     };
     res.header("auth-token", accessToken).send({ token: accessToken });
@@ -47,8 +50,11 @@ const LoginService = async (email, password, res) => {
           const token = jwt.sign(payload, process.env.JWT_KEY, {
             expiresIn: 3600,
           });
+          const refershToken = jwt.sign(payload, process.env.REFRESH_KEY, {
+          });
           const accessToken = {
             accessToken: token,
+            refershToken:refershToken,
             user: email,
           };
           res.cookie('jwt',accessToken,{httpOnly:true,macAge: 50000});

@@ -1,3 +1,4 @@
 {
-    "secretKey" : "jwtPrivateKey"
+    "secretKey" : "jwtPrivateKey",
+    "refreshSecretKey":"jwtRefreshKey"
 }
