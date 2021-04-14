@@ -2,19 +2,13 @@ const express = require("express");
 const authenticateJWT = require("../autherization/autherization");
 const router = express.Router();
 
-router.get("/getUsers", authenticateJWT, (req, res) => {
-  res.send([
+router.get("/getUser", authenticateJWT, (req, res) => {
+  res.send(
     {
-      user: {
-        name: "hashika1",
-      },
+     name:"Hashika Maduranga",
+     email:"m.g.hashikamaduranga@gmail.com"
     },
-    {
-      user: {
-        name: "hashika2",
-      },
-    },
-  ]);
+  );
 });
 
 module.exports = router;
