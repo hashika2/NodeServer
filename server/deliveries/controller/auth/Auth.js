@@ -2,7 +2,8 @@ const {
   RegisterService,
   LoginService,
   LogoutService,
-  ResetPasswordService
+  ResetPasswordService,
+  ConfirmPasswordService
 } = require("../../../services/AuthService");
 const {
   validateLoginAttributes,
@@ -67,6 +68,16 @@ const ResetPassword = (req, res) => {
   return resetPasswordService;
 };
 
+const ConfirmPassword = (req, res) => {
+  const checkHeaders = validateHeaders(req);
+  if (!checkHeaders) {
+    return res.status(400).json({ error: "Custom headers are not supplied" });
+  }
+  const { token,userId,password } = req.body;
+  const resetPasswordService = ConfirmPasswordService(token,userId,password, res);
+  return resetPasswordService;
+};
+
 const User = (req, res) => {
   const checkHeaders = validateHeaders(req);
   if (!checkHeaders) {
@@ -101,4 +112,4 @@ const Logout = (req, res) => {
   return logoutService;
 };
 
-module.exports = { Register, Login, ResetPassword, User, Logout };
+module.exports = { Register, Login, ResetPassword,ConfirmPassword, User, Logout };

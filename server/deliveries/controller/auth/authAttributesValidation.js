@@ -21,6 +21,13 @@ const validateResetAttributes = (insertAttributes) => {
   return validateObject(schema, insertAttributes);
 };
 
+const validateConfirmAttributes = (insertAttributes) => {
+  const schema = {
+    token,
+  };
+  return validateObject(schema, insertAttributes);
+};
+
 const validateRegisterAttributes = (insertAttributes) => {
   const schema = {
     username,

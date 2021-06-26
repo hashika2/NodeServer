@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Register, Login, Logout, ResetPassword } = require("./Auth");
+const { Register, Login, Logout, ResetPassword, ConfirmPassword } = require("./Auth");
 
 router.post("/", (req, res) => {
   const register = Register(req, res);
@@ -14,6 +14,11 @@ router.post("/login", (req, res) => {
 
 router.post("/reset", (req, res) => {
   const login = ResetPassword(req, res);
+  return login;
+});
+
+router.post("/confirm", (req, res) => {
+  const login = ConfirmPassword(req, res);
   return login;
 });
 
