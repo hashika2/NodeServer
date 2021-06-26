@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Register, Login, Logout } = require("./Auth");
+const { Register, Login, Logout, ResetPassword } = require("./Auth");
 
 router.post("/", (req, res) => {
   const register = Register(req, res);
@@ -9,6 +9,11 @@ router.post("/", (req, res) => {
 
 router.post("/login", (req, res) => {
   const login = Login(req, res);
+  return login;
+});
+
+router.post("/reset", (req, res) => {
+  const login = ResetPassword(req, res);
   return login;
 });
 

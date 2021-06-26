@@ -14,6 +14,13 @@ const validateLoginAttributes = (insertAttributes) => {
   return validateObject(schema, insertAttributes);
 };
 
+const validateResetAttributes = (insertAttributes) => {
+  const schema = {
+    email,
+  };
+  return validateObject(schema, insertAttributes);
+};
+
 const validateRegisterAttributes = (insertAttributes) => {
   const schema = {
     username,
@@ -33,5 +40,6 @@ const validateTokenAttributes = (insertAttributes) => {
 module.exports = {
   validateLoginAttributes,
   validateRegisterAttributes,
+  validateResetAttributes,
   validateTokenAttributes,
 };

@@ -5,7 +5,8 @@ const config = require("../shared/environment/config");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const AmozonCognitoIdentity = require("amazon-cognito-identity-js");
-const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
+const nodemailer = require("nodemailer");
 
 database.db();
 const RegisterService = async (username, email, password, res) => {
@@ -17,7 +18,7 @@ const RegisterService = async (username, email, password, res) => {
     });
 
     /** sign up with aws cognito  **/
-   /* const poolData = {
+    /* const poolData = {
       ClientId: config.ClientId,
       UserPoolId: config.UserPoolId,
     };
@@ -68,41 +69,41 @@ const RegisterService = async (username, email, password, res) => {
 const LoginService = async (email, password, res) => {
   try {
     const authenticationData = {
-      Username:email,
-      Password:password
-    }
+      Username: email,
+      Password: password,
+    };
 
     /** signIn with aws cognito and get token **/
-    const authenticationDetails = new AmozonCognitoIdentity.AuthenticationDetails(authenticationData);
-    
+    const authenticationDetails = new AmozonCognitoIdentity.AuthenticationDetails(
+      authenticationData
+    );
+
     const poolData = {
       ClientId: config.ClientId,
       UserPoolId: config.UserPoolId,
     };
     const userPool = new AmozonCognitoIdentity.CognitoUserPool(poolData);
     const userData = {
-      Username:email,
-      Pool: userPool
-    }
+      Username: email,
+      Pool: userPool,
+    };
     const cognitoUser = new AmozonCognitoIdentity.CognitoUser(userData);
-    
+
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: function (session) {
         const tokens = {
           accessToken: session.getAccessToken().getJwtToken(),
           idToken: session.getIdToken().getJwtToken(),
-          refreshToken: session.getRefreshToken().getToken()
+          refreshToken: session.getRefreshToken().getToken(),
         };
-        cognitoUser['tokens'] = tokens; // Save tokens for later use
-        console.log(cognitoUser)
-        return res.send(cognitoUser); // Resolve user
+        cognitoUser["tokens"] = tokens; // Save tokens for later use
+        console.log(cognitoUser);
+        return res.send(cognitoUser.signInUserSession); // Resolve user
       },
       onFailure: function (err) {
         return res.send(err); // Reject out errors
       },
-    })
-
-
+    });
 
     // User.findOne({ email }).then((user) => {
     //   if (!user) {
@@ -135,6 +136,34 @@ const LoginService = async (email, password, res) => {
   }
 };
 
+const ResetPasswordService = async (email, res) => {
+  console.log(email)
+  try {
+    let transporter = await nodemailer.createTransport({
+      host: "smtp.hostinger.com",
+      port: 465,
+      auth: {
+        user: "testmail@codexlabstechnologies.com",
+        pass: "TestMail@12345",
+      },
+    });
+    const link = `http://localhost:3000/confirmPassword?token=123456&id=123`
+    const mailOptions = {
+      from: "testmail@codexlabstechnologies.com",
+      subject:"Forget password",
+      text: `Link here for confirm password! ${link}`,
+      html:`<a href=${link}> forget Password</a>`,
+      to: email,
+    };
+    await transporter.sendMail(mailOptions, (err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(data);
+      }
+    });
+  } catch (err) {}
+};
 const LogoutService = (req, res) => {
   req.user.deleteToken(req.token, (err, user) => {
     if (err) return res.status(400).send(err);
@@ -142,4 +171,9 @@ const LogoutService = (req, res) => {
   });
 };
 
-module.exports = { RegisterService, LoginService, LogoutService };
+module.exports = {
+  RegisterService,
+  LoginService,
+  ResetPasswordService,
+  LogoutService,
+};
